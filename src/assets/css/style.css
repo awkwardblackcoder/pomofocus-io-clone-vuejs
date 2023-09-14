@@ -1,0 +1,181 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+  font-family: "ArialRounded", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-weight: 300;
+  color: white;
+}
+
+.container {
+  background-color: #ba4949;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.container div {
+  max-width: 620px;
+  width: 100%;
+}
+
+/** HEADER CSS **/
+.header {
+  width: 100%;
+  padding: 0 10px;
+  border-bottom: 0.2px solid rgb(165, 67, 67);
+}
+
+.header .btn-list button span {
+  display: none;
+}
+/** END HEADER CSS */
+
+.active-pomodoro {
+  background-color: #ba4949;
+  transition: background 0.5s ease;
+}
+.short-break {
+  background-color: #38858a;
+  transition: background 0.5s ease;
+}
+
+.long-break {
+  background-color: #397097;
+  transition: background 0.5s ease;
+}
+
+/* Pomodoro Section CSS Start */
+.pomofocus-main {
+  width: 100%;
+  margin: 41px 0 20px;
+}
+
+.pomofocus-main section {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+}
+/* Pomodoro Section CSS End */
+
+/** Current Tasks START*/
+.current-task-section {
+  height: 80px;
+  margin-bottom: 20px;
+}
+/** Current Tasks END */
+
+/** TODO: Hide everything but timer (minute), controls and label when width is less than 230px; turn pause button to pause icon
+/* TODO: Set header title and button labels to display: none when width is less than 350 */
+
+@media screen and (min-width: 320px) {
+  /** HEADER CSS START */
+  .header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 0;
+    height: 50px;
+  }
+
+  .header .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .header .title:hover {
+    cursor: pointer;
+  }
+
+  .header .title .material-icons {
+    font-size: 24px;
+  }
+
+  .header .title span {
+    display: none;
+  }
+
+  .header .btn-list {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .header .btn-list button {
+    display: flex;
+    align-items: center;
+    background-color: rgba(234, 221, 221, 0.18);
+    border: none;
+    color: rgb(236, 230, 230);
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .header .btn-list button:hover {
+    color: white;
+    cursor: pointer;
+  }
+
+  .header .btn-list button:not(:last-child) {
+    margin-right: 10px;
+  }
+
+  .header .btn-list .material-icons {
+    font-size: 18px;
+  }
+
+  /** HEADER CSS END */
+}
+
+@media screen and (min-width: 375px) {
+  /** HEADER CSS START */
+  .header {
+    height: 60px;
+  }
+
+  .header .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .header .title:hover {
+    cursor: pointer;
+  }
+
+  .header .title .material-icons {
+    font-size: 22px;
+  }
+
+  .header .title span {
+    display: unset;
+    margin-left: 4px;
+  }
+
+  .header .btn-list button {
+    padding: 5px 12px;
+  }
+
+  .header .btn-list .material-icons {
+    font-size: 21px;
+  }
+  /** HEADER CSS END */
+}
+
+@media screen and (min-width: 575px) {
+  /** HEADER CSS START */
+  .header .btn-list button span {
+    display: block;
+    margin-left: 2px;
+  }
+
+  /** HEADER CSS END */
+}
