@@ -81,7 +81,7 @@ export default {
       let formattedTimeValue = `${minutes.toString().padStart(2, "0")}:${seconds
         .toString()
         .padStart(2, "0")}`;
-      console.info(formattedTimeValue);
+      //console.info(formattedTimeValue);
       return formattedTimeValue;
     },
   },
@@ -109,7 +109,7 @@ export default {
       let date = new Date();
       let minutes = date.getMinutes();
       let endTime = date.setMinutes(minutes + this.timeSpan);
-      console.info("end_time::", endTime);
+      //console.info("end_time::", endTime);
       return endTime;
     },
 
@@ -147,7 +147,7 @@ export default {
     getRemainingTime(end_time) {
       let currentTime = new Date().getTime();
       this.remainingTime = end_time - currentTime;
-      console.info("remainingTime::", this.remainingTime);
+      //console.info("remainingTime::", this.remainingTime);
     },
 
     resetTimer() {
