@@ -8,8 +8,8 @@
     </section>
 
     <section class="pomodoro-tasks-list">
-      <div v-for="(task, index) in taskList" :key="task.id">
-        <div :class="['todo-item', { 'selected': selectedTaskId == task.id }]" @click="selectTask(task.id)">
+      <div v-for="(task, key) in taskList" :key="key">
+        <div :class="['todo-item', { 'selected': selectedTaskId == key }]" @click="selectTask(key)">
           <span class="task-checkmark">
             <i :class="['material-icons', { 'checked': task.isDone == true }]" @click="markTaskComplete(index)">
               check_circle
@@ -73,13 +73,11 @@ export default {
       selectedTaskId: null,
       addTaskMode: false,
       newTask: {
-        id: 1,
         est_pomodoros: 1,
         completed_pomodoros: 0,
         title: "",
       },
       taskList: [{
-        id: 0,
         title: "Brush Teeth",
         est_pomodoros: 1,
         completed_pomodoros: 1,
@@ -100,7 +98,6 @@ export default {
       let newTask = newPomodoroTask;
       this.taskList.push(newTask);
       this.newTask = {
-        id: 2,
         est_pomodoros: 1,
         completed_pomodoros: 0,
         title: ""
