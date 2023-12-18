@@ -11,7 +11,7 @@
       <div v-for="(task, key) in taskList" :key="key">
         <div :class="['todo-item', { 'selected': selectedTaskId == key }]" @click="selectTask(key)">
           <span class="task-checkmark">
-            <i :class="['material-icons', { 'checked': task.isDone == true }]" @click="markTaskComplete(index)">
+            <i :class="['material-icons', { 'checked': task.isDone == true }]" @click="markTaskComplete(key)">
               check_circle
             </i>
           </span>
@@ -95,7 +95,12 @@ export default {
       this.selectedTaskId = id;
     },
     addTasktoList(newPomodoroTask) {
-      let newTask = newPomodoroTask;
+      let newTask = {
+        title: newPomodoroTask.title,
+        est_pomodoros: newPomodoroTask['est_pomodoros'],
+        completed_pomodoros: 0,
+        isDone: false
+      }
       this.taskList.push(newTask);
       this.newTask = {
         est_pomodoros: 1,
