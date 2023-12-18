@@ -71,7 +71,6 @@ export default {
   data() {
     return {
       selectedTaskId: null,
-      currentTaskInEditMode: 0,
       addTaskMode: false,
       newTask: {
         id: 1,
