@@ -28,16 +28,17 @@
     </section>
      <section v-if="addTaskMode" class="add-task-section">
       <section class="input-section">
-        <input type="text" name="new-task-title-textbox" id="new-task-title" v-model="newTask['title']" placeholder="What are you working on?">
+        <input type="text" name="new-task-title-textbox" id="new-task-title" v-model="newTask['title']"
+          placeholder="What are you working on?">
       </section>
       <section class="est-pomodoros-section">
         <label for="est-pomodoros-textbox">Est Pomodoros</label>
         <section class="est-pomo-input">
           <input type="text" name="est-pomodoros-textbox" id="est-pomodoros-textbox" v-model="newTask['est_pomodoros']">
-          <button class="increase-pomos">
+          <button class="increase-pomos" @click="increase_pomodoros">
             <i class="material-icons">arrow_drop_up</i>
           </button>
-          <button class="decrease-pomos">
+          <button class="decrease-pomos" @click="decrease_pomodoros">
             <i class="material-icons">arrow_drop_down</i>
           </button>
         </section>
@@ -70,42 +71,21 @@ export default {
   data() {
     return {
       selectedTaskId: null,
+      currentTaskInEditMode: 0,
       addTaskMode: false,
       newTask: {
-        id: 5,
+        id: 1,
         est_pomodoros: 1,
         completed_pomodoros: 0,
         title: "",
       },
       taskList: [{
-        id: 1,
+        id: 0,
         title: "Brush Teeth",
         est_pomodoros: 1,
         completed_pomodoros: 1,
         isDone: true
-      },
-      {
-        id: 2,
-        title: "Make Breakfast",
-        est_pomodoros: 1,
-        completed_pomodoros: 0,
-        isDone: false
-      },
-      {
-        id: 3,
-        title: "Drink Green Tea",
-        est_pomodoros: 1,
-        completed_pomodoros: 0,
-        isDone: false
-      },
-      {
-        id: 4,
-        title: "Code",
-        est_pomodoros: 1,
-        completed_pomodoros: 1,
-        isDone: true
-      }
-      ]
+      }]
     };
   },
   methods: {
@@ -120,13 +100,30 @@ export default {
     addTasktoList(newPomodoroTask) {
       let newTask = newPomodoroTask;
       this.taskList.push(newTask);
-      console.info(this.taskList);
       this.newTask = {
-        id: 6,
+        id: 2,
         est_pomodoros: 1,
         completed_pomodoros: 0,
         title: ""
       }
+    },
+    increase_pomodoros() {
+      let estPomodoros = this.newTask['est_pomodoros'];
+      if (estPomodoros < 1) {
+        estPomodoros += 0.10;
+      } else estPomodoros++;
+      this.newTask['est_pomodoros'] = Math.floor(estPomodoros) !== estPomodoros ? estPomodoros.toFixed(1) : estPomodoros;
+    },
+    decrease_pomodoros() {
+      let estPomodoros = this.newTask['est_pomodoros'];
+      if (estPomodoros <= .10) {
+        estPomodoros = 0;
+      }
+      else if (estPomodoros <= 1) {
+        estPomodoros -= 0.10;
+      } else { estPomodoros--; }
+
+      this.newTask['est_pomodoros'] = Math.floor(estPomodoros) !== estPomodoros ? estPomodoros.toFixed(1) : estPomodoros;
     }
   }
 };
@@ -182,15 +179,15 @@ export default {
   margin-top: 6px;
   box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
   grid-template-columns: 1fr 9fr 1fr 1fr;
-  width: calc(100% - 12px);
+  border-left: 6px solid white;
+  width: calc(100% - 18px);
   padding: 15px 0 15px 12px;
   cursor: pointer;
   height: auto;
 }
 
 .todo-item:hover {
-  border-left: 6px solid #dfdfdf;
-  width: calc(100% - 18px);
+  border-color: #dfdfdf;
 }
 
 .todo-item.selected {
@@ -259,6 +256,10 @@ export default {
   padding: 2px 1px;
   border-radius: 4px;
   font-size: 27px;
+}
+
+.todo-item .todo-menu-btn i:hover {
+  background-color: #dfdfdf;
 }
 
 /** TODO Item CSS End */
@@ -383,6 +384,7 @@ export default {
 .add-task-section .settings i {
   font-size: 18px;
 }
+
 .add-task-section .settings a i {
 font-weight: bold;
 text-decoration: underline;
@@ -429,10 +431,10 @@ font-size: 14px;
 .add-task-section-footer button:hover {
   cursor: pointer;
 }
+
 .add-task-section-footer .save:hover {
 opacity: 1;
 }
+
 /** End Add Task Section */
-
-
 </style>
