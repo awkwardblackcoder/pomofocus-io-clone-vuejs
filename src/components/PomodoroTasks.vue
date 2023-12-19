@@ -36,7 +36,7 @@
       </section>
       <section class="add-edit-task-section-footer">
           <button class="cancel" @click="task.editMode = false">Cancel</button>
-          <button class="save" @click="saveTask(key)">Save</button>
+          <button class="save" @click="saveTaskChanges(key)">Save</button>
         </section>
         </article>
         <article v-else :class="['todo-item', { 'selected': selectedTaskId == key }]" @click="selectTask(key)">
@@ -135,12 +135,7 @@ export default {
         isDone: false
       }
       this.taskList.push(newTask);
-      this.newTask = {
-        est_pomodoros: 1,
-        act_pomodoros: 0,
-        title: "",
-        editMode: false
-      }
+      this.resetNewTask();
     },
 
     editTask(id) {
@@ -151,6 +146,30 @@ export default {
       let task = this.taskList[id];
       task.editMode = true;
       this.newTask = task;
+    },
+
+    cancelTaskEdit(id) {
+      let task = this.taskList[id];
+      task.editMode = false;
+      this.resetNewTask();
+    },
+
+    resetNewTask() {
+      this.newTask = {
+        est_pomodoros: 1,
+        act_pomodoros: 0,
+        title: "",
+        editMode: false
+      }
+    },
+
+    saveTaskChanges(id) {
+      let task = this.taskList[id]; 
+      if(task != this.newTask) {
+      task = this.newTask;
+      this.resetNewTask();
+      }
+      task.editMode = false;
     },
 
     increase_pomodoros() {
