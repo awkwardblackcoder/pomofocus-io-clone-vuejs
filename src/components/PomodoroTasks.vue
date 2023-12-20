@@ -85,7 +85,7 @@
         </section>
     </section>
     <section>
-      <button class="add-task-btn" v-if="!addTaskMode" @click="addTaskMode = true">
+      <button class="add-task-btn" v-if="!addTaskMode" @click="openNewTaskbox()">
         <i class="material-icons-round">add_circle</i>
         <span>Add Task</span>
       </button>
@@ -116,6 +116,7 @@ export default {
       }]
     };
   },
+  
   methods: {
     markTaskComplete(index) {
       event.stopPropagation(); // Prevent event from propagating to the parent
@@ -125,6 +126,22 @@ export default {
 
     selectTask(id) {
       this.selectedTaskId = id;
+    },
+
+    openNewTaskbox() {
+      this.taskList.every((task) => {
+        if(task.editMode) {
+          this.$confirm('The change will be lost. Are you sure you want to close it?', 'pomofocus.io says').then(() => {
+            task.editMode = false;
+            this.resetNewTask();
+            this.addTaskMode = true;
+          }).catch(() => {
+            //no action will be taken
+          })
+        } else {
+          this.addTaskMode = true;
+        }
+      })
     },
 
     addTasktoList(newPomodoroTask) {
@@ -139,6 +156,11 @@ export default {
     },
 
     editTask(id) {
+      if(this.addTaskMode) {
+        this.addTaskMode = false;
+        this.resetNewTask();
+      }
+
       this.taskList.forEach((task)=> {
         task.editMode = false;
       })
