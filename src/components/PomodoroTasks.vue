@@ -35,8 +35,11 @@
           </ul>
       </section>
       <section class="add-edit-task-section-footer">
-          <button class="cancel" @click="task.editMode = false">Cancel</button>
+        <button class="delete" @click="deleteTask(key)">Delete</button>
+          <span>
+            <button class="cancel" @click="task.editMode = false">Cancel</button>
           <button class="save" @click="saveTaskChanges(key)">Save</button>
+          </span>
         </section>
         </article>
         <article v-else :class="['todo-item', { 'selected': selectedTaskId == key }]" @click="selectTask(key)">
@@ -129,19 +132,21 @@ export default {
     },
 
     openNewTaskbox() {
-      this.taskList.every((task) => {
-        if(task.editMode) {
-          this.$confirm('The change will be lost. Are you sure you want to close it?', 'pomofocus.io says').then(() => {
-            task.editMode = false;
-            this.resetNewTask();
+      if (this.taskList.length > 0) {
+        this.taskList.every((task) => {
+          if (task.editMode) {
+            this.$confirm('The change will be lost. Are you sure you want to close it?', 'pomofocus.io says').then(() => {
+              task.editMode = false;
+              this.resetNewTask();
+              this.addTaskMode = true;
+            }).catch(() => {
+              //no action will be taken
+            })
+          } else {
             this.addTaskMode = true;
-          }).catch(() => {
-            //no action will be taken
-          })
-        } else {
-          this.addTaskMode = true;
-        }
-      })
+          }
+        })
+      } else this.addTaskMode = true;
     },
 
     addTasktoList(newPomodoroTask) {
@@ -192,6 +197,11 @@ export default {
       this.resetNewTask();
       }
       task.editMode = false;
+    },
+
+    deleteTask(id) {
+      this.taskList.splice(id, 1);
+      this.resetNewTask();
     },
 
     increase_pomodoros() {
@@ -506,6 +516,8 @@ font-size: 14px;
   background-color: #efefef;
   padding: 15px 20px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .add-edit-task-section .add-edit-task-section-footer button {
@@ -515,18 +527,9 @@ font-size: 14px;
   font-size: 14px;
   min-width: 70px;
   padding: 8px 12px;
+  margin-right: 10px;
   border-radius: 4px;
   opacity: .9;
-}
-
-.add-edit-task-section .add-edit-task-section-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.add-edit-task-section-footer button {
-  margin-left: 10px;
 }
 
 .add-edit-task-section-footer button.save {
