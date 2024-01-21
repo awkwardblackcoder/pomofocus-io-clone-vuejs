@@ -19,12 +19,11 @@
       </header>
       <main class="pomofocus-main">
         <section class="pomodoro-timer-section">
-          <pomodoro-timer
-            @switch-pomodoro-status="switchPomodoroStatus"
-          ></pomodoro-timer>
+          <pomodoro-timer @switch-pomodoro-status="switchPomodoroStatus"></pomodoro-timer>
         </section>
-        <section class="current-task-section">
+        <section class="selected-task-section">
           <!-- TODO: Add current task and pomodoro interval number here -->
+          <selected-task></selected-task>
         </section>
         <section class="pomodoro-tasks-section">
           <pomodoro-tasks></pomodoro-tasks>
@@ -36,17 +35,22 @@
 
 <script>
 import Vue from "vue";
+import { store } from './store';
 import PomodoroTimer from "./components/PomodoroTimer.vue";
 import PomodoroTasks from "./components/PomodoroTasks.vue";
+import SelectedTask from './components/SelectedTask'
 
 Vue.component("pomodoro-timer", PomodoroTimer);
 Vue.component("pomodoro-tasks", PomodoroTasks);
+Vue.component("selected-task", SelectedTask);
 export default {
   name: "App",
   components: {
     PomodoroTimer,
     PomodoroTasks,
+    SelectedTask
   },
+  store,
   data() {
     return {
       pomodoroStatus: "active_pomodoro",
@@ -69,5 +73,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

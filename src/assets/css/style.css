@@ -61,13 +61,6 @@ html {
 }
 /* Pomodoro Section CSS End */
 
-/** Current Tasks START*/
-.current-task-section {
-  height: 80px;
-  margin-bottom: 20px;
-}
-/** Current Tasks END */
-
 /** TODO: Hide everything but timer (minute), controls and label when width is less than 230px; turn pause button to pause icon
 /* TODO: Set header title and button labels to display: none when width is less than 350 */
 

@@ -2,10 +2,7 @@
   <section class="pomodoro-timer-container">
     <div class="btn-list">
       <span v-for="btn in pomodoroTimerButtons" :key="btn.id">
-        <button
-          :class="[{ selected: pomodoroStatus == btn.type }]"
-          @click="switchPomodoroStatus(btn.type)"
-        >
+        <button :class="[{ selected: pomodoroStatus == btn.type }]" @click="switchPomodoroStatus(btn.type)">
           <span>{{ btn.label }}</span>
         </button>
       </span>
@@ -14,24 +11,16 @@
       <b>{{ remainingTime | formatTime }}</b>
     </div>
     <div :class="['action-btns', { 'active-timer': timerActive == true }]">
-      <button
-        class="timer-btn"
-        v-if="!timerActive"
-        @click="
-          timerActive = !timerActive;
-          startTimer();
-        "
-      >
+      <button class="timer-btn" v-if="!timerActive" @click="
+        timerActive = !timerActive;
+      startTimer();
+      ">
         <b>START</b>
       </button>
-      <button
-        class="timer-btn pause"
-        v-else-if="timerActive"
-        @click.prevent="
-          timerActive = !timerActive;
-          pauseTimer();
-        "
-      >
+      <button class="timer-btn pause" v-else-if="timerActive" @click.prevent="
+        timerActive = !timerActive;
+      pauseTimer();
+      ">
         <b>PAUSE</b>
       </button>
       <button v-if="timerActive" class="next" @click.prevent="resetTimer">
@@ -42,6 +31,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
   name: "PomodoroTimer",
   data() {
@@ -62,7 +52,6 @@ export default {
         },
       ],
       timeSpan: 25,
-      timerInterval: 0,
       countdownTimer: null,
       remainingTime: null,
       timerActive: false,
@@ -104,7 +93,7 @@ export default {
      *
      * https://stackoverflow.com/questions/18889548/javascript-change-gethours-to-2-digit
      */
-
+    ...mapActions(['incrementPomodoroCnt', 'setSelectedActivity']),
     getEndTime() {
       let date = new Date();
       let minutes = date.getMinutes();
@@ -125,9 +114,6 @@ export default {
         let date = new Date();
         endTime = date.setTime(date.getTime() + this.remainingTime);
       } else {
-        if (this.pomodoroStatus == "active_pomodoro") {
-          this.timerInterval++;
-        }
         endTime = this.getEndTime();
       }
       this.countdownTimer = setInterval(() => {
@@ -159,11 +145,12 @@ export default {
 
     setPomodoroStatus() {
       if (this.pomodoroStatus == "active_pomodoro") {
-        if (this.timerInterval % 4 == 0) {
+        if (this.pomodoroCnt % 4 == 0) {
           this.switchPomodoroStatus("long_break");
         } else this.switchPomodoroStatus("short_break");
       } else {
         this.switchPomodoroStatus("active_pomodoro");
+        this.incrementPomodoroCnt();
       }
     },
 
@@ -191,6 +178,9 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState(['pomodoroCnt']),
+  }
 };
 </script>
 

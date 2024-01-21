@@ -11,36 +11,38 @@
       <div v-for="(task, key) in taskList" :key="key">
         <article v-if="task.editMode" class="add-edit-task-section">
           <section class="input-section">
-        <input type="text" name="task-title-textbox" class="task-title" v-model="newTask['title']"
-          placeholder="What are you working on?" autofocus>
-      </section>
-      <section class="pomodoro-input-section">
-        <label for="pomodoros-textbox">Act / Est Pomodoros</label>
-        <section class="pomo-input">
-          <input type="number" min="0" step="1" name="act-pomodoros-textbox" id="act-pomodoros-textbox" v-model="newTask['act_pomodoros']">
-          <span class="divider">/</span>
-          <input type="number" min="0" step="1" name="est-pomodoros-textbox" id="est-pomodoros-textbox" v-model="newTask['est_pomodoros']">
-          <button class="increase-pomos" @click="increase_pomodoros">
-            <i class="material-icons">arrow_drop_up</i>
-          </button>
-          <button class="decrease-pomos" @click="decrease_pomodoros">
-            <i class="material-icons">arrow_drop_down</i>
-          </button>
-        </section>
-    </section>
-      <section>
-        <ul class="settings">
-            <li><a href="#"><i class="material-icons">add</i>Add Note</a></li>
-            <li><a href="#"><i class="material-icons">add</i>Add Project</a><i class="material-icons">lock</i></li>
-          </ul>
-      </section>
-      <section class="add-edit-task-section-footer">
-        <button class="delete" @click="deleteTask(key)">Delete</button>
-          <span>
-            <button class="cancel" @click="task.editMode = false">Cancel</button>
-          <button class="save" @click="saveTaskChanges(key)">Save</button>
-          </span>
-        </section>
+            <input type="text" name="task-title-textbox" class="task-title" v-model="newTask['title']"
+              placeholder="What are you working on?" autofocus>
+          </section>
+          <section class="pomodoro-input-section">
+            <label for="pomodoros-textbox">Act / Est Pomodoros</label>
+            <section class="pomo-input">
+              <input type="number" min="0" step="1" name="act-pomodoros-textbox" id="act-pomodoros-textbox"
+                v-model="newTask['act_pomodoros']">
+              <span class="divider">/</span>
+              <input type="number" min="0" step="1" name="est-pomodoros-textbox" id="est-pomodoros-textbox"
+                v-model="newTask['est_pomodoros']">
+              <button class="increase-pomos" @click="increase_pomodoros">
+                <i class="material-icons">arrow_drop_up</i>
+              </button>
+              <button class="decrease-pomos" @click="decrease_pomodoros">
+                <i class="material-icons">arrow_drop_down</i>
+              </button>
+            </section>
+          </section>
+          <section>
+            <ul class="settings">
+              <li><a href="#"><i class="material-icons">add</i>Add Note</a></li>
+              <li><a href="#"><i class="material-icons">add</i>Add Project</a><i class="material-icons">lock</i></li>
+            </ul>
+          </section>
+          <section class="add-edit-task-section-footer">
+            <button class="delete" @click="deleteTask(key)">Delete</button>
+            <span>
+              <button class="cancel" @click="cancelTaskEdit(key)">Cancel</button>
+              <button class="save" @click="saveTaskChanges(key)">Save</button>
+            </span>
+          </section>
         </article>
         <article v-else :class="['todo-item', { 'selected': selectedTaskId == key }]" @click="selectTask(key)">
           <span class="task-checkmark">
@@ -59,7 +61,7 @@
         </article>
       </div>
     </section>
-     <section v-if="addTaskMode" class="add-edit-task-section">
+    <section v-if="addTaskMode" class="add-edit-task-section">
       <section class="input-section">
         <input type="text" name="task-title-textbox" class="task-title" v-model="newTask['title']"
           placeholder="What are you working on?">
@@ -67,7 +69,8 @@
       <section class="pomodoro-input-section">
         <label for="pomodoros-textbox">Est Pomodoros</label>
         <section class="pomo-input">
-          <input type="number" min="0" step="1" name="est-pomodoros-textbox" id="est-pomodoros-textbox" v-model="newTask['est_pomodoros']">
+          <input type="number" min="0" step="1" name="est-pomodoros-textbox" id="est-pomodoros-textbox"
+            v-model="newTask['est_pomodoros']">
           <button class="increase-pomos" @click="increase_pomodoros">
             <i class="material-icons">arrow_drop_up</i>
           </button>
@@ -75,17 +78,17 @@
             <i class="material-icons">arrow_drop_down</i>
           </button>
         </section>
-    </section>
+      </section>
       <section>
         <ul class="settings">
-            <li><a href="#"><i class="material-icons">add</i>Add Note</a></li>
-            <li><a href="#"><i class="material-icons">add</i>Add Project</a><i class="material-icons">lock</i></li>
-          </ul>
+          <li><a href="#"><i class="material-icons">add</i>Add Note</a></li>
+          <li><a href="#"><i class="material-icons">add</i>Add Project</a><i class="material-icons">lock</i></li>
+        </ul>
       </section>
       <section class="add-edit-task-section-footer">
-          <button class="cancel" @click="addTaskMode = false">Cancel</button>
-          <button class="save" @click="addTasktoList(newTask)">Save</button>
-        </section>
+        <button class="cancel" @click="resetNewTask()">Cancel</button>
+        <button class="save" @click="addTasktoList(newTask)">Save</button>
+      </section>
     </section>
     <section>
       <button class="add-task-btn" v-if="!addTaskMode" @click="openNewTaskbox()">
@@ -97,8 +100,7 @@
 </template>
 
 <script>
-
-
+import { mapActions } from 'vuex'
 export default {
   name: "PomodoroTasks",
   data() {
@@ -119,8 +121,9 @@ export default {
       }]
     };
   },
-  
+
   methods: {
+    ...mapActions(['setSelectedTask']),
     markTaskComplete(index) {
       event.stopPropagation(); // Prevent event from propagating to the parent
       let task = this.taskList[index];
@@ -129,6 +132,8 @@ export default {
 
     selectTask(id) {
       this.selectedTaskId = id;
+      let taskName = this.taskList[id].title;
+      this.setSelectedTask(taskName);
     },
 
     openNewTaskbox() {
@@ -161,12 +166,12 @@ export default {
     },
 
     editTask(id) {
-      if(this.addTaskMode) {
+      if (this.addTaskMode) {
         this.addTaskMode = false;
         this.resetNewTask();
       }
 
-      this.taskList.forEach((task)=> {
+      this.taskList.forEach((task) => {
         task.editMode = false;
       })
 
@@ -186,21 +191,28 @@ export default {
         est_pomodoros: 1,
         act_pomodoros: 0,
         title: "",
-        editMode: false
+      }
+
+      if (this.addTaskMode) {
+        this.addTaskMode = false;
       }
     },
 
     saveTaskChanges(id) {
-      let task = this.taskList[id]; 
-      if(task != this.newTask) {
-      task = this.newTask;
-      this.resetNewTask();
+      let task = this.taskList[id];
+      if (task != this.newTask) {
+        task = this.newTask;
+        this.resetNewTask();
       }
       task.editMode = false;
     },
 
     deleteTask(id) {
       this.taskList.splice(id, 1);
+      if (this.selectedTaskId == id) {
+        this.setSelectedTask('Time to focus!');
+        this.selectedTaskId = null;
+      }
       this.resetNewTask();
     },
 
@@ -347,7 +359,7 @@ export default {
   align-items: center;
   justify-content: center;
   border: none;
-    background: none;
+  background: none;
 }
 
 .todo-item .todo-menu-btn i {
@@ -398,7 +410,9 @@ export default {
   box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
-.add-edit-task-section .input-section,.add-edit-task-section .pomodoro-input-section, .add-edit-task-section .settings {
+.add-edit-task-section .input-section,
+.add-edit-task-section .pomodoro-input-section,
+.add-edit-task-section .settings {
   padding-left: 20px;
 
 }
@@ -413,7 +427,7 @@ export default {
   margin-bottom: 20px;
   letter-spacing: -0.2px;
   color: #555555;
-  
+
 }
 
 .add-edit-task-section .task-title::placeholder {
@@ -470,8 +484,8 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 2px;
   cursor: pointer;
   display: flex;
-    align-items: center;
-    justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .pomodoro-input-section .pomo-input button i {
@@ -481,14 +495,14 @@ export default {
 .add-edit-task-section .settings {
   display: flex;
   list-style: none;
-  
+
 }
 
 .add-edit-task-section .settings li {
-    text-decoration: none;
-    display: flex;
-    align-items: flex-end;
-    letter-spacing: .02em;
+  text-decoration: none;
+  display: flex;
+  align-items: flex-end;
+  letter-spacing: .02em;
 }
 
 .add-edit-task-section .settings li a {
@@ -504,9 +518,9 @@ export default {
 }
 
 .add-edit-task-section .settings a i {
-font-weight: bold;
-text-decoration: underline;
-font-size: 14px;
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 14px;
 }
 
 .add-edit-task-section .add-edit-task-section-footer {
@@ -544,11 +558,11 @@ font-size: 14px;
 }
 
 .add-edit-task-section-footer .save:hover {
-opacity: 1;
+  opacity: 1;
 }
 
 .pomodoro-tasks-list .add-edit-task-section {
-    margin-top: 10px !important;
+  margin-top: 10px !important;
 }
 
 /** End Add Edit Task Section */
